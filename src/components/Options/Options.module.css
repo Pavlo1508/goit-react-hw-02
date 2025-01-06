@@ -1,0 +1,38 @@
+.wrapper {
+	margin-bottom: 10px;
+}
+
+.btn_list {
+	display: flex;
+	gap: 10px;
+}
+
+.btn {
+	padding: 7px 5px;
+	border: 1px solid black;
+	border-radius: 10px;
+	font-weight: 700;
+	cursor: pointer;
+
+	&:nth-child(1) {
+		background-color: green;
+		color: white;
+	};
+	&:nth-child(2) {
+		background-color: gray;
+		color: white;
+	};
+	&:nth-child(3) {
+		background-color: red;
+		color: white;
+	};
+	&:nth-child(4) {
+		background: linear-gradient(90deg, rgb(0, 255, 85) 0%, rgb(104, 104, 103) 50%, rgb(255, 2, 2) 100%);
+		color: white;
+		display: none;
+	};
+
+	&:hover {
+		box-shadow: 0 0 10px black;
+	}
+}
