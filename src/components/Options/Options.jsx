@@ -1,24 +1,18 @@
 import s from "./Options.module.css";
 
-const Options = ({ updateFeedback, resetFeedback, showReset }) => {
-  return (
-    <div className={s.wrapper}>
-      <ul className={s.btn_list}>
-        <li onClick={() => updateFeedback("Good")} className={s.btn}>
-          Good
-        </li>
-        <li onClick={() => updateFeedback("Neutral")} className={s.btn}>
-          Neutral
-        </li>
-        <li onClick={() => updateFeedback("Bad")} className={s.btn}>
-          Bad
-        </li>
-				{showReset() ? <li onClick={resetFeedback} className={s.btn}>
-					Reset
-				</li> : ""}
-      </ul>
-    </div>
-  );
-};
+const Options = ({ updateFeedback, resetFeedback, showReset }) => (
+  <div className={s.wrapper}>
+    {["Good", "Neutral", "Bad"].map((type) => (
+      <button key={type} onClick={() => updateFeedback(type)} className={s.btn}>
+        {type}
+      </button>
+    ))}
+    {showReset && (
+      <button onClick={resetFeedback} className={s.btn}>
+        Reset
+      </button>
+    )}
+  </div>
+);
 
-export default Options
+export default Options;

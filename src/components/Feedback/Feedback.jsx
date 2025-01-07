@@ -9,8 +9,8 @@ const Feedback = ({ feedbackData, totalFeedback, positiveFeedback }) => (
           {`${key}: ${value}`}
         </li>
       ))}
-      <li className={s.result}>Total: {totalFeedback()}</li>
-      <li className={s.result}>Positive: {positiveFeedback()}</li>
+      <li className={s.result}>Total: {totalFeedback}</li>
+      <li className={s.result}>Positive: {positiveFeedback}</li>
     </ul>
   </div>
 );

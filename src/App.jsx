@@ -1,4 +1,4 @@
-import { useEffect, useState} from "react";
+import { useEffect, useState } from "react";
 
 import Description from "./components/Description/Description";
 import Feedback from "./components/Feedback/Feedback";
@@ -6,59 +6,47 @@ import Options from "./components/Options/Options";
 import Notification from "./components/Notification/Notification";
 
 const App = () => {
-const INITIAL_STATE = { Good: 0, Neutral: 0, Bad: 0 };
+  const INITIAL_STATE = { Good: 0, Neutral: 0, Bad: 0 };
 
-	const getInitialFeedback = () => {
+  const [feedback, setFeedback] = useState(() => {
     const savedFeedback = localStorage.getItem("feedback");
     return savedFeedback ? JSON.parse(savedFeedback) : INITIAL_STATE;
+  });
+
+  useEffect(() => {
+    localStorage.setItem("feedback", JSON.stringify(feedback));
+  }, [feedback]);
+
+  const updateFeedback = (feedbackType) => {
+    setFeedback((prev) => ({
+      ...prev,
+      [feedbackType]: prev[feedbackType] + 1,
+    }));
   };
 
-	const [feedback, setFeedback] = useState(getInitialFeedback);
-	
-	useEffect(() => {
-    localStorage.setItem("feedback", JSON.stringify(feedback));
-	}, [feedback]);
-	
-	const updateFeedback = (feedbackType) => {
-		setFeedback(prev => {
-			const updatedCounts = {
-        ...prev,
-        [feedbackType]: prev[feedbackType] + 1,
-			};
-			
-			return updatedCounts
-		})
-	}
+  const resetFeedback = () => setFeedback(INITIAL_STATE);
 
-	const resetFeedback = () => {
-		setFeedback(INITIAL_STATE);
-	}
+  const totalFeedback = Object.values(feedback).reduce(
+    (sum, count) => sum + count,
+    0
+  );
+  const positiveFeedback = totalFeedback
+    ? `${Math.round((feedback.Good / totalFeedback) * 100)}%`
+    : "0%";
 
-	const calculateTotal = () => {
-		let total = feedback.Good + feedback.Neutral + feedback.Bad
-
-		return total
-	}
-
-	const calculatePositiveFeedback = () => {
-		let positiveFeedback = Math.round((feedback.Good / calculateTotal()) * 100) + '%';
-
-		return positiveFeedback
-	}
-
-	return (
+  return (
     <>
       <Description />
       <Options
         updateFeedback={updateFeedback}
         resetFeedback={resetFeedback}
-        showReset={calculateTotal}
+        showReset={totalFeedback > 0}
       />
-      {calculateTotal() ? (
+      {totalFeedback > 0 ? (
         <Feedback
           feedbackData={feedback}
-          totalFeedback={calculateTotal}
-          positiveFeedback={calculatePositiveFeedback}
+          totalFeedback={totalFeedback}
+          positiveFeedback={positiveFeedback}
         />
       ) : (
         <Notification />
