@@ -6,11 +6,11 @@ import Options from "./components/Options/Options";
 import Notification from "./components/Notification/Notification";
 
 const App = () => {
+const INITIAL_STATE = { Good: 0, Neutral: 0, Bad: 0 };
+
 	const getInitialFeedback = () => {
     const savedFeedback = localStorage.getItem("feedback");
-    return savedFeedback
-      ? JSON.parse(savedFeedback)
-      : { Good: 0, Neutral: 0, Bad: 0 };
+    return savedFeedback ? JSON.parse(savedFeedback) : INITIAL_STATE;
   };
 
 	const [feedback, setFeedback] = useState(getInitialFeedback);
@@ -31,11 +31,7 @@ const App = () => {
 	}
 
 	const resetFeedback = () => {
-		setFeedback({
-			Good: 0,
-			Neutral: 0,
-			Bad: 0,
-		});
+		setFeedback(INITIAL_STATE);
 	}
 
 	const calculateTotal = () => {
