@@ -1,24 +1,18 @@
 // import { useState } from 'react';
 import s from './Feedback.module.css';
 
-const Feedback = ({
-  good,
-  neutral,
-  bad,
-	total,
-	positive
-}) => {
-  return (
-    <div className={s.wrapper}>
-      <ul className={s.result_list}>
-        <li className={s.result}>Good: {good}</li>
-        <li className={s.result}>Neutral: {neutral}</li>
-        <li className={s.result}>Bad: {bad}</li>
-        <li className={s.result}>Total: {total}</li>
-        <li className={s.result}>Positive: {positive}</li>
-      </ul>
-    </div>
-  );
-};
+const Feedback = ({ feedbackData, totalFeedback, positiveFeedback }) => (
+  <div className={s.wrapper}>
+    <ul className={s.result_list}>
+      {Object.entries(feedbackData).map(([key, value]) => (
+        <li key={key} className={s.result}>
+          {`${key}: ${value}`}
+        </li>
+      ))}
+      <li className={s.result}>Total: {totalFeedback()}</li>
+      <li className={s.result}>Positive: {positiveFeedback()}</li>
+    </ul>
+  </div>
+);
 
 export default Feedback;

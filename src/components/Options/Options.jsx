@@ -4,18 +4,18 @@ const Options = ({ updateFeedback, resetFeedback, showReset }) => {
   return (
     <div className={s.wrapper}>
       <ul className={s.btn_list}>
-        <li onClick={() => updateFeedback("good")} className={s.btn}>
+        <li onClick={() => updateFeedback("Good")} className={s.btn}>
           Good
         </li>
-        <li onClick={() => updateFeedback("neutral")} className={s.btn}>
+        <li onClick={() => updateFeedback("Neutral")} className={s.btn}>
           Neutral
         </li>
-        <li onClick={() => updateFeedback("bad")} className={s.btn}>
+        <li onClick={() => updateFeedback("Bad")} className={s.btn}>
           Bad
-				</li>
-				<li onClick={resetFeedback} className={s.btn} style={{display: showReset}}>
-          Reset
         </li>
+				{showReset() ? <li onClick={resetFeedback} className={s.btn}>
+					Reset
+				</li> : ""}
       </ul>
     </div>
   );

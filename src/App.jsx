@@ -1,77 +1,71 @@
-import { useState, useEffect } from "react";
+import { useEffect, useState} from "react";
+
 import Description from "./components/Description/Description";
-import Options from "./components/Options/Options";
 import Feedback from "./components/Feedback/Feedback";
+import Options from "./components/Options/Options";
+import Notification from "./components/Notification/Notification";
 
 const App = () => {
-  const [feedback, setFeedback] = useState(() => {
+	const getInitialFeedback = () => {
     const savedFeedback = localStorage.getItem("feedback");
     return savedFeedback
       ? JSON.parse(savedFeedback)
-      : {
-          good: 0,
-          neutral: 0,
-          bad: 0,
-          total: 0,
-          positive: "0%",
-        };
-  });
+      : { Good: 0, Neutral: 0, Bad: 0 };
+  };
 
-  useEffect(() => {
+	const [feedback, setFeedback] = useState(getInitialFeedback);
+	
+	useEffect(() => {
     localStorage.setItem("feedback", JSON.stringify(feedback));
-  }, [feedback]);
-
-  const updateFeedback = (feedbackType) => {
-    setFeedback((prev) => {
-      const updatedCounts = {
+	}, [feedback]);
+	
+	const updateFeedback = (feedbackType) => {
+		setFeedback(prev => {
+			const updatedCounts = {
         ...prev,
         [feedbackType]: prev[feedbackType] + 1,
-      };
-      const total =
-        updatedCounts.good + updatedCounts.neutral + updatedCounts.bad;
-      const positive =
-        total > 0 ? `${Math.round((updatedCounts.good / total) * 100)}%` : "0%";
+			};
+			
+			return updatedCounts
+		})
+	}
 
-      return {
-        ...updatedCounts,
-        total,
-        positive,
-      };
-    });
-  };
+	const resetFeedback = () => {
+		setFeedback({
+			Good: 0,
+			Neutral: 0,
+			Bad: 0,
+		});
+	}
 
-  const resetFeedback = () => {
-    const initialState = {
-      good: 0,
-      neutral: 0,
-      bad: 0,
-      total: 0,
-      positive: "0%",
-    };
-    setFeedback(initialState);
-    localStorage.setItem("feedback", JSON.stringify(initialState));
-  };
+	const calculateTotal = () => {
+		let total = feedback.Good + feedback.Neutral + feedback.Bad
 
-  const hasFeedback = feedback.total > 0;
+		return total
+	}
 
-  return (
+	const calculatePositiveFeedback = () => {
+		let positiveFeedback = Math.round((feedback.Good / calculateTotal()) * 100) + '%';
+
+		return positiveFeedback
+	}
+
+	return (
     <>
       <Description />
       <Options
         updateFeedback={updateFeedback}
         resetFeedback={resetFeedback}
-        showReset={hasFeedback ? "block" : "none"}
+        showReset={calculateTotal}
       />
-      {hasFeedback ? (
+      {calculateTotal() ? (
         <Feedback
-          good={feedback.good}
-          neutral={feedback.neutral}
-          bad={feedback.bad}
-          total={feedback.total}
-          positive={feedback.positive}
+          feedbackData={feedback}
+          totalFeedback={calculateTotal}
+          positiveFeedback={calculatePositiveFeedback}
         />
       ) : (
-        <p>No feedback yet</p>
+        <Notification />
       )}
     </>
   );
